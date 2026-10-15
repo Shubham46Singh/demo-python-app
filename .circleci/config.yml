@@ -57,10 +57,11 @@ jobs:
       - run:
           name: Install dependencies
           command: pip install -r requirements-dev.txt
+      
       - run:
           name: Wait for PostgreSQL and Redis
           command: |
-            python - <<'PY'
+            python -c '
             import os
             import time
             import psycopg
@@ -77,7 +78,8 @@ jobs:
                     time.sleep(2)
             else:
                 raise RuntimeError("Database or Redis did not become ready")
-            PY
+            '
+
       - run:
           name: Run integration tests
           command: python -m pytest tests/test_integration.py -v
